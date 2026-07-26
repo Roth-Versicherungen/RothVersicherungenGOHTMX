@@ -19,7 +19,7 @@ else
 	TAILWIND_TARGET := linux-$(ARCH)
 endif
 
-.PHONY: help dev run build css css-watch tailwind htmx test tidy clean
+.PHONY: help dev run build export css css-watch tailwind htmx test tidy clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
@@ -32,6 +32,9 @@ run: ## Run the server (prod mode, embedded assets)
 
 build: css ## Build CSS and compile a self-contained production binary
 	go build -o $(BIN_DIR)/server ./cmd/server
+
+export: css ## Pre-render the whole site as static files into public/
+	go run ./cmd/export
 
 css: $(TAILWIND) ## Build Tailwind CSS once
 	$(TAILWIND) -i web/static/css/input.css -o web/static/css/output.css --minify

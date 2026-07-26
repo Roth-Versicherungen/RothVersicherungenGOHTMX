@@ -1,5 +1,6 @@
 # Build artifacts
 bin/
+public/
 
 # Local data (SQLite database)
 data/

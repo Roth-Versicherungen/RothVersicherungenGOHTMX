@@ -10,11 +10,11 @@ import (
 	"syscall"
 	"time"
 
-	"handler/internal/config"
-	"handler/internal/db"
-	"handler/internal/i18n"
-	"handler/internal/server"
-	"handler/internal/view"
+	"github.com/maxroth/eumel/internal/config"
+	"github.com/maxroth/eumel/internal/db"
+	"github.com/maxroth/eumel/internal/i18n"
+	"github.com/maxroth/eumel/internal/server"
+	"github.com/maxroth/eumel/internal/view"
 )
 
 func main() {

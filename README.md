@@ -65,9 +65,9 @@ ENV=prod ./bin/server
 
 The binary is fully self-contained — copy it to the server and run it. Configuration via env vars (see `.env.example`).
 
-### Deploy to Vercel
+### Deploy to Vercel (static export)
 
-The repo also works on Vercel as a single serverless function: `vercel.json` rewrites every route to `api/index.go`, which serves the same mux as the binary (embedded assets, no SQLite — the serverless filesystem is read-only). Just push; no build command or env vars needed. Remember to commit `web/static/css/output.css` after running `make css`, since Vercel does not run the Tailwind build.
+The site is pure content, so on Vercel it deploys as prerendered static files instead of a Go serverless function: the build command in `vercel.json` runs `go run ./cmd/export`, which renders every route in `internal/server.Pages` to `public/<route>/index.html` (plus `404.html` and the static assets), and Vercel serves that directory from its CDN. Just push — no env vars needed. Remember to commit `web/static/css/output.css` after running `make css`, since the export embeds it as-is.
 
 ## Make targets
 

@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"handler/internal/view"
+	"github.com/maxroth/eumel/internal/view"
 )
 
 type Handler struct {

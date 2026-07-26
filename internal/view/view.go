@@ -20,8 +20,8 @@ import (
 	"strings"
 	"time"
 
-	"handler/internal/i18n"
-	"handler/web"
+	"github.com/maxroth/eumel/internal/i18n"
+	"github.com/maxroth/eumel/web"
 )
 
 type View struct {
