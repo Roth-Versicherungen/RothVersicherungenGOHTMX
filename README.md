@@ -67,7 +67,7 @@ The binary is fully self-contained — copy it to the server and run it. Configu
 
 ### Deploy to Vercel (static export)
 
-The site is pure content, so on Vercel it deploys as prerendered static files instead of a Go serverless function: the build command in `vercel.json` runs `go run ./cmd/export`, which renders every route in `internal/server.Pages` to `public/<route>/index.html` (plus `404.html` and the static assets), and Vercel serves that directory from its CDN. Just push — no env vars needed. Remember to commit `web/static/css/output.css` after running `make css`, since the export embeds it as-is.
+The site is pure content, so on Vercel it deploys as prerendered static files instead of a Go serverless function: the build command in `vercel.json` runs `scripts/vercel-build.sh`, which downloads the Go toolchain (Vercel's build image has none) and runs `go run ./cmd/export`. That renders every route in `internal/server.Pages` to `public/<route>/index.html` (plus `404.html` and the static assets), and Vercel serves that directory from its CDN. Just push — no env vars needed. Remember to commit `web/static/css/output.css` after running `make css`, since the export embeds it as-is.
 
 ## Make targets
 

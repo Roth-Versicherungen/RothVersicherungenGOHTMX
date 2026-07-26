@@ -1,7 +1,7 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "framework": null,
-    "buildCommand": "go run ./cmd/export",
+    "buildCommand": "sh scripts/vercel-build.sh",
     "outputDirectory": "public",
     "trailingSlash": false
 }
