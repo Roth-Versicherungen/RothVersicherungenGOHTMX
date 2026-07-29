@@ -2,9 +2,10 @@
 package server
 
 import (
-	"database/sql"
+	"fmt"
 	"io/fs"
 	"net/http"
+	"sort"
 
 	"github.com/maxroth/eumel/internal/config"
 	"github.com/maxroth/eumel/internal/handlers"
@@ -41,8 +42,8 @@ var Pages = map[string]string{
 	"/sitemap":         "sitemap.html",
 }
 
-func New(cfg *config.Config, database *sql.DB, v *view.View, tr *i18n.Translator) http.Handler {
-	h := &handlers.Handler{DB: database, View: v}
+func New(cfg *config.Config, v *view.View, tr *i18n.Translator) http.Handler {
+	h := &handlers.Handler{View: v}
 
 	mux := http.NewServeMux()
 
@@ -66,6 +67,10 @@ func New(cfg *config.Config, database *sql.DB, v *view.View, tr *i18n.Translator
 	}
 	mux.Handle("GET /static/", http.StripPrefix("/static/", cacheStatic(cfg, http.FileServer(staticFS))))
 
+	// Crawler files, generated from the Pages map.
+	mux.HandleFunc("GET /robots.txt", robotsTxt(cfg))
+	mux.HandleFunc("GET /sitemap.xml", sitemapXML(cfg))
+
 	// Operational
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -80,6 +85,31 @@ func New(cfg *config.Config, database *sql.DB, v *view.View, tr *i18n.Translator
 	handler = Logger(handler)
 	handler = Recover(v)(handler)
 	return handler
+}
+
+func robotsTxt(cfg *config.Config) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		fmt.Fprintf(w, "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n", cfg.BaseURL)
+	}
+}
+
+func sitemapXML(cfg *config.Config) http.HandlerFunc {
+	routes := make([]string, 0, len(Pages))
+	for route := range Pages {
+		routes = append(routes, route)
+	}
+	sort.Strings(routes)
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/xml; charset=utf-8")
+		fmt.Fprint(w, `<?xml version="1.0" encoding="UTF-8"?>`+"\n")
+		fmt.Fprint(w, `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`+"\n")
+		for _, route := range routes {
+			fmt.Fprintf(w, "  <url><loc>%s%s</loc></url>\n", cfg.BaseURL, route)
+		}
+		fmt.Fprint(w, "</urlset>\n")
+	}
 }
 
 func cacheStatic(cfg *config.Config, next http.Handler) http.Handler {

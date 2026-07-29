@@ -1,5 +1,5 @@
 // Package locales embeds all translation string files.
-// Add a new language by dropping a <lang>.json file here (e.g. fr.json).
+// Add a new language by dropping a <lang>.json file here (e.g. en.json).
 package locales
 
 import "embed"

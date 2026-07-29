@@ -2,7 +2,6 @@
   "site.title": "Roth Versicherungen Langen",
   "site.name": "Roth Versicherungen Maklergesellschaft m.b.H.",
   "site.description": "Roth Versicherungen Maklergesellschaft in Langen – persönliche, neutrale Beratung für Privat- und Firmenkunden seit 1907. Ihr lokaler Versicherungs- und Finanzmakler.",
-
   "company.tagline": "Ihr Versicherungsmakler seit 1907",
   "company.street": "Bahnstraße 95",
   "company.city": "63225 Langen",
@@ -13,7 +12,6 @@
   "company.email_finanz": "info@rothfinanz.de",
   "company.name": "Roth Versicherungen Maklergesellschaft m.b.H.",
   "company.finanz_name": "Roth Finanz Maklergesellschaft m.b.H.",
-
   "nav.skip_to_content": "Zum Hauptinhalt springen",
   "nav.primary": "Hauptnavigation",
   "nav.footer": "Seitenfuß",
@@ -39,7 +37,6 @@
   "nav.kontakt": "Kontakt & Anfahrt",
   "nav.sitemap": "Sitemap",
   "nav.termin": "Termin vereinbaren",
-
   "header.since": "Versicherungen",
   "header.since_vers": "seit 1907",
   "header.since_finanz_label": "Finanz",
@@ -48,11 +45,9 @@
   "header.call_aria": "Anruf an %s",
   "header.mail_aria": "E-Mail an %s",
   "header.hours_short": "Mo–Fr 9:00–17:00 Uhr",
-
   "actions.learn_more": "Mehr erfahren →",
   "actions.call_us": "Anrufen",
   "actions.back_to_home": "Zurück zur Startseite →",
-
   "cta.eyebrow": "Sprechen Sie uns an",
   "cta.heading_vers": "Persönliche Beratung – seit 1907.",
   "cta.heading_finanz": "Persönliche Beratung – seit 1970.",
@@ -60,7 +55,6 @@
   "cta.hours": "Bürozeiten: Montag bis Freitag, 9:00 – 17:00 Uhr",
   "cta.send_message": "Nachricht schreiben",
   "cta.aria": "Kontaktaufnahme",
-
   "footer.title.allgemein": "Allgemein",
   "footer.title.hours": "Öffnungszeiten",
   "footer.title.roth_versicherungen": "Roth Versicherungen",
@@ -72,7 +66,6 @@
   "footer.copyright": "© %d Roth Versicherungen Maklergesellschaft m.b.H. · Roth Finanz Maklergesellschaft m.b.H. – Alle Rechte vorbehalten.",
   "footer.license": "Versicherungsmakler nach § 34d Abs. 1 GewO",
   "footer.logo_alt": "Roth Versicherungen Logo",
-
   "notfound.eyebrow": "404",
   "notfound.title": "Seite nicht gefunden.",
   "notfound.subtitle": "Die von Ihnen aufgerufene Seite existiert nicht oder wurde verschoben.",

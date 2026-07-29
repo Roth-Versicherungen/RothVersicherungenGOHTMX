@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/maxroth/eumel/internal/config"
-	"github.com/maxroth/eumel/internal/db"
 	"github.com/maxroth/eumel/internal/i18n"
 	"github.com/maxroth/eumel/internal/server"
 	"github.com/maxroth/eumel/internal/view"
@@ -30,29 +29,19 @@ func run() error {
 	logger := newLogger(cfg)
 	slog.SetDefault(logger)
 
-	database, err := db.Open(cfg.DBPath)
-	if err != nil {
-		return err
-	}
-	defer database.Close()
-
-	if err := db.Migrate(database); err != nil {
-		return err
-	}
-
 	translator, err := i18n.Load(cfg.DefaultLang)
 	if err != nil {
 		return err
 	}
 
-	renderer, err := view.New(cfg.Dev, translator)
+	renderer, err := view.New(cfg.Dev, cfg.BaseURL, translator)
 	if err != nil {
 		return err
 	}
 
 	srv := &http.Server{
 		Addr:              cfg.Addr,
-		Handler:           server.New(cfg, database, renderer, translator),
+		Handler:           server.New(cfg, renderer, translator),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 

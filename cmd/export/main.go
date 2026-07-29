@@ -38,11 +38,11 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	v, err := view.New(cfg.Dev, tr)
+	v, err := view.New(cfg.Dev, cfg.BaseURL, tr)
 	if err != nil {
 		return err
 	}
-	handler := server.New(cfg, nil, v, tr)
+	handler := server.New(cfg, v, tr)
 
 	if err := os.RemoveAll(outDir); err != nil {
 		return err
@@ -57,6 +57,12 @@ func run() error {
 	// 404 page, picked up automatically by static hosts like Vercel.
 	if err := render(handler, "/this-page-does-not-exist", http.StatusNotFound, filepath.Join(outDir, "404.html")); err != nil {
 		return err
+	}
+	// Crawler files.
+	for _, name := range []string{"robots.txt", "sitemap.xml"} {
+		if err := render(handler, "/"+name, http.StatusOK, filepath.Join(outDir, name)); err != nil {
+			return err
+		}
 	}
 
 	static, err := fs.Sub(web.Static, "static")

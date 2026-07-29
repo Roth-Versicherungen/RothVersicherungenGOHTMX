@@ -25,10 +25,11 @@ import (
 )
 
 type View struct {
-	dev   bool
-	tr    *i18n.Translator
-	fsys  fs.FS
-	pages map[string]*template.Template // page name -> layout+partials+page
+	dev     bool
+	baseURL string
+	tr      *i18n.Translator
+	fsys    fs.FS
+	pages   map[string]*template.Template // page name -> layout+partials+page
 }
 
 // Data is what every template sees. Page-specific values go in .Data.
@@ -36,11 +37,12 @@ type Data struct {
 	Lang      string
 	Languages []string
 	Path      string
+	BaseURL   string
 	Data      any
 }
 
-func New(dev bool, tr *i18n.Translator) (*View, error) {
-	v := &View{dev: dev, tr: tr}
+func New(dev bool, baseURL string, tr *i18n.Translator) (*View, error) {
+	v := &View{dev: dev, baseURL: baseURL, tr: tr}
 	if dev {
 		v.fsys = os.DirFS("web/templates")
 	} else {
@@ -191,6 +193,7 @@ func (v *View) execute(w http.ResponseWriter, r *http.Request, tmpl *template.Te
 		Lang:      lang,
 		Languages: v.tr.Languages(),
 		Path:      r.URL.Path,
+		BaseURL:   v.baseURL,
 		Data:      data,
 	}); err != nil {
 		slog.Error("render", "template", name, "err", err)

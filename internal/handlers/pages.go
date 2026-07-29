@@ -3,7 +3,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"log/slog"
 	"net/http"
 
@@ -11,7 +10,6 @@ import (
 )
 
 type Handler struct {
-	DB   *sql.DB
 	View *view.View
 }
 

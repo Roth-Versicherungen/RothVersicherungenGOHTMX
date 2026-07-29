@@ -3,7 +3,7 @@
 //
 // String files are flat JSON maps with dot-separated keys:
 //
-//	{ "nav.home": "Home", "todos.count": "%d open todos" }
+//	{ "nav.home": "Startseite", "home.hero.title": "..." }
 //
 // Values are fmt.Sprintf format strings when arguments are passed.
 package i18n
@@ -25,6 +25,11 @@ const CookieName = "lang"
 type Translator struct {
 	defaultLang string
 	langs       map[string]map[string]string
+
+	// OnMissing, when set, is called for every lookup that falls back
+	// to the key itself. Used by tests to catch untranslated strings;
+	// not safe to mutate after the translator is in use.
+	OnMissing func(lang, key string)
 }
 
 // Load parses every *.json file in the locales folder. The filename
@@ -66,6 +71,9 @@ func (t *Translator) T(lang, key string, args ...any) string {
 		s, ok = t.langs[t.defaultLang][key]
 	}
 	if !ok {
+		if t.OnMissing != nil {
+			t.OnMissing(lang, key)
+		}
 		return key
 	}
 	if len(args) > 0 {

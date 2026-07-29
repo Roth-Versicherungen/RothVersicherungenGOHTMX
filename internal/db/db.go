@@ -1,4 +1,8 @@
 // Package db opens the SQLite database and runs embedded migrations.
+//
+// Currently dormant: the site is pure content and nothing reads the
+// database. To revive it, call Open + Migrate in cmd/server/main.go
+// and hand the *sql.DB to whatever needs it.
 package db
 
 import (

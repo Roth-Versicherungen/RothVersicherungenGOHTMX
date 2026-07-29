@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{block "title" .}}{{t "site.title"}}{{end}}</title>
     <meta name="description" content="{{block "description" .}}{{t "site.description"}}{{end}}">
+    <link rel="canonical" href="{{.BaseURL}}{{.Path}}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{t "site.name"}}">
+    <meta property="og:title" content="{{template "title" .}}">
+    <meta property="og:description" content="{{template "description" .}}">
+    <meta property="og:url" content="{{.BaseURL}}{{.Path}}">
+    <meta property="og:locale" content="de_DE">
     <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/static/css/output.css">
     <script src="/static/js/htmx.min.js" defer></script>

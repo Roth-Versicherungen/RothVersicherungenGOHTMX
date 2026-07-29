@@ -15,17 +15,18 @@ Open http://localhost:8080. In dev mode, templates and static files are re-read 
 ## Project layout
 
 ```
-cmd/server/            Entrypoint: config, DB, i18n, renderer, graceful shutdown
+cmd/server/            Entrypoint: config, i18n, renderer, graceful shutdown
+cmd/export/            Pre-renders the whole site into public/ (static deploys, Vercel)
 internal/
-  config/              Env-var configuration (ADDR, ENV, DB_PATH, DEFAULT_LANG)
-  server/              Routes + middleware (language, logging, panic recovery)
+  config/              Env-var configuration (ADDR, ENV, BASE_URL, DEFAULT_LANG)
+  server/              Pages route map + middleware + robots.txt/sitemap.xml
   handlers/            HTTP handlers — every page renders a static template
-  db/                  SQLite setup, embedded migrations (currently unused, kept for future features)
+  db/                  SQLite setup + migrations (dormant; see package doc to revive)
   i18n/                String loading + per-request language resolution
   view/                Template renderer (dev: live reload, prod: parsed once, embedded)
 locales/               All site content and UI strings: de.json (flat JSON, dot keys)
 web/
-  templates/layouts/   base.html — the page shell (header, footer, meta)
+  templates/layouts/   base.html — the page shell (header, footer, meta/SEO tags)
   templates/pages/     One file per page, fills the "content" block
   templates/partials/  nav, footer, page-hero, section-head, cta, link-card, legal helpers
   static/              css/ (Tailwind in+out), js/ (vendored htmx + nav.js), img/ (site images)
@@ -45,16 +46,18 @@ web/
 ### Add a page
 
 1. Create `web/templates/pages/name.html` with `{{define "content"}}` (plus optional `title`/`description` blocks).
-2. Register the route in `internal/server/server.go`: `mux.HandleFunc("GET /path", h.Page("name.html"))`.
+2. Add the route to the `Pages` map in `internal/server/server.go` — that single entry drives the route, the sitemap and the static export.
 3. Add its strings to `locales/de.json`.
+
+`go test ./...` verifies every page renders and that no translation key is missing.
 
 ### Edit content
 
-All visible text lives in `locales/de.json`. Lists use numbered keys (`x.items.1`, `x.items.2`, …) and are rendered with the `tlist` template function; changing text needs no template edits.
+All visible text lives in `locales/de.json`, grouped per page by blank lines. Lists use numbered keys (`x.items.1`, `x.items.2`, …) and are rendered with the `tlist` template function; changing text needs no template edits.
 
-### Add a migration
+### Use the database
 
-Create `internal/db/migrations/0002_something.sql`. Applied automatically at startup, tracked in `schema_migrations`.
+`internal/db` is dormant — nothing opens it today. To revive it, call `db.Open` + `db.Migrate` in `cmd/server/main.go` and pass the `*sql.DB` where needed; migrations are sequential `internal/db/migrations/NNNN_name.sql` files, tracked in `schema_migrations`.
 
 ### Deploy
 
